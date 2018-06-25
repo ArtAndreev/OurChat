@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign in{% endblock title %}
+{% block content %}
+  <div class="login">
+    <div class="site">
+      <div class="site__logo mr-20"></div>
+      <span class="site__name">tête-à-tête</span>
+    </div>
+    <form class="main-box login__box mb-20" action="{% url 'auth:login_view' %}" method="post">
+      {% csrf_token %}
+      <h1 class="title">Sign in to chat</h1>
+      {% if next %}
+        <strong><div class="error-box mb-20">Please login to see this page.</div></strong>
+      {% endif %}
+      {% if form.errors %}
+        {% for error in form.non_field_errors %}
+          <div class="error-box mb-20">
+            <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% for field in form %}
+        <label for="{{ field.id_for_label }}" class="login__elem form__label">{{ field.label }}</label>
+        {% for error in field.errors %}
+          <div class="error-box mb-20">
+            <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+        {{ field.as_widget }}
+      {% endfor %}
+      <input type="hidden" name="next" value="{{ next }}" />
+      <button class="form__btn green-btn" type="submit">Sign in</button>
+    </form>
+    <div class="main-box signup__box">
+      New to our chat?
+      <a href="{% url 'auth:signup_view' %}" class="link">Sign up</a>
+    </div>
+  </div>
+{% endblock content %}

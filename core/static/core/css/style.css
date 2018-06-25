@@ -1,0 +1,306 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 320px;
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+/* formatting */
+
+  /* margin: 10px */
+
+.m-10 {
+  margin: 10px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+  /* margin: 20px */
+
+.mr-20 {
+  margin-right: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+  /* link */
+
+.link {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: bold;
+}
+  /* buttons */
+
+.green-btn {
+  background-color: #54FF3A;
+  font-size: 1rem;
+  border: none;
+  border-radius: 3px;
+  color: #ffffff;
+}
+
+.green-btn:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.2em rgba(52,208,88,0.4);
+}
+
+  /* li */
+
+.list-item {
+  list-style-type: none;
+  vertical-align: middle;
+}
+
+  /* boxes */
+
+.main-box {
+  background-color: #6360FF;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 20px 15px;
+}
+
+.error-box {
+  background-color: #E86CD6;
+  color: #ff0000;
+  border-radius: 3px;
+  padding: 20px 15px;
+  word-wrap: break-word;
+}
+
+.simple-box {
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 3px;
+  padding: 20px 15px;
+  word-wrap: break-word;
+}
+
+  /* title */
+
+.title {
+  margin-top: 0;
+  text-align: center;
+}
+
+  /* form */
+
+.form__label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.form__field {
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 3px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  line-height: 20px;
+}
+
+.form__btn {
+  width: 100%;
+  height: 40px;
+}
+
+/***********/
+/* content */
+/***********/
+
+/* header, footer */
+
+header {
+  width: 100%;
+  height: 60px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  background-color: #6360FF;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+}
+
+.header__elem {
+  display: inline-flex;
+  align-items: center;
+}
+
+.header__logout {
+  width: 30px;
+  height: 30px;
+  background: url(/static/authentication/img/x-button.svg/) no-repeat;}
+
+/* user */
+
+.user__avatar {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
+/* site */
+
+.site {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site__logo {
+  width: 40px;
+  height: 40px;
+  background: url(/static/core/img/logo.svg/) no-repeat;
+}
+
+.site__name {
+  font-size: 32px;
+  font-weight: 400;
+}
+
+/* login, sign-up */
+
+.login, .signup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px 0;
+}
+
+.login__box, .signup__box {
+  width: 35%;
+  min-width: 320px;
+}
+
+.login__elem, .signup__elem {
+  display: block;
+  width: 100%;
+}
+
+.login .signup__box {
+  text-align: center;
+}
+
+.login .site {
+  padding-bottom: 40px;
+}
+
+.signup {
+
+}
+
+/* chat */
+
+.chat {
+  padding: 20px 60px;
+  height: calc(100% - 60px - 60px);
+  overflow: auto;
+  box-sizing: border-box;
+  /* flex */
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start; /* for not full width (like inline) */
+}
+
+/* message */
+
+.message {
+  max-width: 50%;
+  padding: 10px 20px;
+  background: #edeef0;
+  border-radius: 30px;
+  transition: background 0.2s linear;
+}
+
+.message-right {
+  align-self: flex-end;
+}
+
+.message:hover {
+  background: #47E8E7;
+}
+
+.message__author {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.message__time {
+  color: #586069;
+}
+
+.message-reverse {
+  flex-direction: row-reverse;
+}
+
+.message__text-reverse {
+  text-align: right;
+}
+
+/* input */
+
+.input {
+  padding: 10px 20px;
+  height: 60px;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #6360FF;
+}
+
+.input__elem {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.input__btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+}
+
+.input__pic-attach {
+  background: url(/static/core/img/push-pin.svg/) no-repeat center;
+}
+
+.input__pic-send {
+  background: url(/static/core/img/right-arrow.svg/) no-repeat center;
+}
+
+.input__field {
+  background-color: #edeef0;
+  width: calc(100% - 60px - 60px);
+  height: 100%;
+  border-radius: 30px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.input input {
+  outline: none;
+  border: none;
+  background-color: unset;
+  width: 100%;
+}

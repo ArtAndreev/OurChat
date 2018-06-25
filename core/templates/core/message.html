@@ -1,0 +1,20 @@
+{% load static %}
+
+{% if message.author != request.user %}
+<div class="message m-10">
+  <div class="message__author mb-10">
+{% else %}
+<div class="message message-right message__text-reverse m-10">
+  <div class="message__author message-reverse mb-10">
+{% endif %}
+  <img class="user__avatar message__avatar" src="
+  {% if message.author.avatar %}
+    {{ message.author.avatar }}
+  {% else %}
+    {% static 'authentication/img/user.svg' %}/">
+  {% endif %}
+    <span class="message__name ml-10 mr-10">{{ message.author.username }}</span>
+    <span class="message__time">{{ message.date }}</span>
+  </div>
+  <span class="message__text">{{ message.text }}</span>
+</div>

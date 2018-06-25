@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} New chat {% endblock title %}
+
+{% block header %}
+  {% include 'header.html' %}
+{% endblock header %}
+
+{% block content %}
+  <div class="chat">
+    {% for message in object_list %}
+      {% include 'core/message.html' %}
+    {% endfor %}
+  </div>
+  <form class="input" action="{% url 'core:send_view' %}" method="post">
+    {% csrf_token %}
+    <div class="input__elem input__btn mr-10 input__pic-attach"></div>
+    <div class="input__elem input__field">
+      <input type="text" value="" name="text" placeholder="Input message..." autocomplete="off"/>
+    </div>
+    <button type="submit" class="input__elem input__btn ml-10 input__pic-send"></button>
+  </form>
+{% endblock content %}

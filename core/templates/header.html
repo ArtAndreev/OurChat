@@ -1,0 +1,26 @@
+{% load static %}
+
+<header>
+  <div class="header__elem site mr-10">
+    <div class="site__logo mr-20"></div>
+    <span class="site__name">tête-à-tête</span>
+  </div>
+  <div class="header__elem">
+    {% if request.user.is_authenticated %}
+      <li class="list-item m-10">{{ request.user.username }}</li>
+      <li class="list-item m-10"><img src="
+        {% if request.user.avatar %}
+          {{ request.user.avatar }}
+        {% else %}
+          {% static 'authentication/img/user.svg' %}
+        {% endif %}" class="user__avatar"/>
+      </li>
+      <li class="list-item m-10">
+        <a href="{% url 'auth:logout' %}"><div class="header__logout"></div></a>
+      </li>
+    {% else %}
+      <li class="list-item m-10"><a href="{% url 'auth:login_view' %}" class="link">Sign in</a></li>
+      <li class="list-item m-10"><a href="{% url 'auth:signup_view' %}" class="link">Sign up</a></li>
+    {% endif %}
+  </div>
+</header>

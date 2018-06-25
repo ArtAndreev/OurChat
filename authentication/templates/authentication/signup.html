@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign up{% endblock title %}
+{% block header %}
+  {% include 'header.html' %}
+{% endblock header %}
+{% block content %}
+  <div class="signup">
+    <form class="main-box signup__box mb-20" action="{% url 'auth:signup_view' %}" method="post">
+      {% csrf_token %}
+      <h1 class="title">Sign up to chat</h1>
+      {% if form.errors %}
+        {% for error in form.non_field_errors %}
+          <div class="error-box mb-20">
+            <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% for field in form %}
+        <label for="{{ field.id_for_label }}" class="signup__elem form__label">{{ field.label }}</label>
+        {% for error in field.errors %}
+          <div class="error-box">
+            <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+        {{ field.as_widget }}
+      {% endfor %}
+      <input type="hidden" name="next" value="{{ next }}" />
+      <button class="form__btn green-btn" type="submit">Sign up now!</button>
+    </form>
+  </div>
+{% endblock content %}
