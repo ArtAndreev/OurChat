@@ -17,3 +17,7 @@ class Message(models.Model):
 
     def __str__(self):
         return 'At {0} by {1}'.format(self.date, self.author)
+
+
+class ChatRoom(models.Model):
+    pass

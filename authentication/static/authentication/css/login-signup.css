@@ -1,0 +1,27 @@
+/* login, sign-up */
+
+.login, .signup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px 0;
+}
+
+.login__box, .signup__box {
+  width: 35%;
+  min-width: 320px;
+}
+
+.login__elem, .signup__elem {
+  display: block;
+  width: 100%;
+}
+
+.login .signup__box {
+  text-align: center;
+}
+
+.login .site {
+  padding-bottom: 40px;
+}

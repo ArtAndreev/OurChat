@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %} New chat {% endblock title %}
+
+{% block extra_styles %}
+  <link href="{% static 'core/css/chat.css' %}" type="text/css" rel="stylesheet">
+{% endblock extra_styles %}
+
+{% block extra_scripts %}
+  <script src="{% static 'core/js/csrf.js' %}"></script>
+  <script src="{% static 'core/js/chat.js' %}"></script>
+{% endblock extra_scripts %}
 
 {% block header %}
   {% include 'header.html' %}
@@ -8,11 +18,11 @@
 
 {% block content %}
   <div class="chat">
-    {% for message in object_list %}
+    {% for message in messages %}
       {% include 'core/message.html' %}
     {% endfor %}
   </div>
-  <form class="input" action="{% url 'core:send_view' %}" method="post">
+  <form id="message__form" action="{% url 'core:send_view' %}" method="post">
     {% csrf_token %}
     <div class="input__elem input__btn mr-10 input__pic-attach"></div>
     <div class="input__elem input__field">

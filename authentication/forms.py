@@ -1,5 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from django.contrib.auth import password_validation
+from django.contrib.auth.forms import AuthenticationForm, UsernameField, \
+    UserCreationForm
 
 from . import models
 
@@ -24,21 +26,40 @@ class LoginForm(AuthenticationForm):
     )
 
 
-class SignUpForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={
-                'autofocus': 'true',
-                'class': 'signup__elem form__field mb-20',
-                'placeholder': 'Choose your username'
-    }), min_length=4, max_length=150)
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'signup__elem form__field mb-20',
-        'placeholder': 'Confirm password'
-    }))
+class SignUpForm(UserCreationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'autofocus': 'true',
+            'class': 'signup__elem form__field mb-20',
+            'placeholder': 'Choose your username'
+        }),
+        min_length=4,
+        max_length=32,
+    )
+
+    password1 = forms.CharField(
+        label='Password',
+        strip=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'signup__elem form__field mb-20',
+            'placeholder': 'Choose a strong password'
+        }),
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    password2 = forms.CharField(
+        label='Confirm password',
+        widget=forms.PasswordInput(attrs={
+            'class': 'signup__elem form__field mb-20',
+            'placeholder': 'Confirm password'
+        }),
+        strip=False,
+        help_text='Enter the same password as before, for verification.',
+    )
 
     class Meta:
         model = models.User
         fields = ['username', 'first_name', 'last_name', 'email',
-                  'about', 'avatar', 'password']
+                  'about', 'avatar', ]
         widgets = {
             'first_name': forms.TextInput(attrs={
                 'class': 'signup__elem form__field mb-20',
@@ -59,28 +80,24 @@ class SignUpForm(forms.ModelForm):
             'avatar': forms.FileInput(attrs={
                 'class': 'signup__elem form__field mb-20',
             }),
-            'password': forms.PasswordInput(attrs={
-                'class': 'signup__elem form__field mb-20',
-                'placeholder': 'Choose a strong password'
-            }),
         }
-
-    def clean(self):
-        cleaned_data = super(SignUpForm, self).clean()
-        password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
-
-        if password != confirm_password:
-            raise forms.ValidationError(
-                "Password and confirm password does not match."
-            )
-
-        return self.cleaned_data
-
-    def save(self, commit=True):
-        # Save the provided password in hashed format
-        user = super(SignUpForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password"])
-        if commit:
-            user.save()
-        return user
+    #
+    # def clean(self):
+    #     cleaned_data = super(SignUpForm, self).clean()
+    #     password = cleaned_data.get("password")
+    #     confirm_password = cleaned_data.get("confirm_password")
+    #
+    #     if password != confirm_password:
+    #         raise forms.ValidationError(
+    #             "Password and confirm password does not match."
+    #         )
+    #
+    #     return self.cleaned_data
+    #
+    # def save(self, commit=True):
+    #     user = super(SignUpForm, self).save(commit=False)
+    #     user.set_password(self.cleaned_data["password"])
+    #     if commit:
+    #         user.save()
+    #     return user
+    pass

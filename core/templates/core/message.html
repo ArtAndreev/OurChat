@@ -1,10 +1,10 @@
 {% load static %}
 
 {% if message.author != request.user %}
-<div class="message m-10">
+<div class="message m-10" data-id="{{ message.id }}">
   <div class="message__author mb-10">
 {% else %}
-<div class="message message-right message__text-reverse m-10">
+<div class="message message-right message__text-reverse m-10" data-id="{{ message.id }}">
   <div class="message__author message-reverse mb-10">
 {% endif %}
   <img class="user__avatar message__avatar" src="
