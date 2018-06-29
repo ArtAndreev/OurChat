@@ -1,3 +1,36 @@
+'use strict';
+
+import '../css/chat.scss';
+import '../img/push-pin.svg'
+import '../img/right-arrow.svg'
+
+import $ from 'jquery';
+import moment from 'moment';
+
+import '../../../../authentication/static/authentication/js/auth_info';
+import './csrf';
+
+const messageTemplate = (id, text, time, author) => {
+    if (author === undefined) {
+        author = this.username
+    }
+    return `<div class="message">
+    <div class="message__author">
+      <div class="message__name">
+      
+${author}
+</div>
+   <div class="message__time">
+${moment(time).format('MMMM Do YYYY, h:mm:ss a')}
+</div>
+  </div>
+   <div class="message__text">
+</div>
+${text}
+</div>
+   `};
+
+
 $(document).ready(() => {
     let form = $('#message__form');
     let input = $('#message__form input');
@@ -22,7 +55,9 @@ $(document).ready(() => {
             contentType: false,
 
             success: response => {
-                chat.prepend(response.renderedTemplate);
+                // debugger;
+                chat.prepend(messageTemplate(response.id, response.text,
+                        response.date, response.author));
 
                 input.val('');
             }
@@ -30,7 +65,7 @@ $(document).ready(() => {
     });
 
     // polling
-    setInterval(() => {
+    /*setInterval(() => {
         const lastId = $('.message').first().data('id');
 
         $.get({
@@ -41,9 +76,10 @@ $(document).ready(() => {
 
             success: response => {
                 if (response) {
-                    chat.prepend(response);
+                    chat.prepend(messageTemplate(response.id, response.text,
+                        response.time, response.author));
                 }
             }
         })
-    }, 1000); // polling time is 1 sec
+    }, 1000); // polling time is 1 sec*/
 });

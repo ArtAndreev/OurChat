@@ -1,6 +1,9 @@
 # PyCharm
 .idea/
 
+# Webpack
+webpack-stats.json
+
 
 # Created by https://www.gitignore.io/api/macos,python,pycharm,virtualenv,django,node
 
