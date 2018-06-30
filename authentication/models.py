@@ -22,7 +22,9 @@ class User(AbstractUser):
     email = models.EmailField('email', blank=False, unique=True)
 
     # customizing
-    avatar = models.ImageField(blank=True, verbose_name='User avatar')
+    avatar = models.ImageField(blank=True, verbose_name='User avatar',
+                               upload_to='authentication/img/user_avatars',
+                               default='authentication/img/user_avatars/user_default.svg')
     about = models.TextField(blank=True, max_length=100, verbose_name='About')
 
     class Meta:

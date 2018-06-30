@@ -1,15 +1,19 @@
 'use strict';
 
-var username, avatar;
 const getUserInfo = () => {
+    let User = {};
     $.get({
-        url: '/auth/info',
+        url: '/auth/info/',
 
         success: response => {
             if (response) {
-                username = response.username;
-                avatar = response.avatar;
+                User.username = response.username;
+                User.avatar = response.avatar;
             }
         }
     });
+
+    return User;
 };
+
+export { getUserInfo }

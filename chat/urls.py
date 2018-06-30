@@ -14,9 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.conf.urls import url, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,15 @@ urlpatterns = [
     url(r'^auth/', include(('authentication.urls', 'auth'), 'authentication')),
 ]
 
-urlpatterns += staticfiles_urlpatterns()
+# if settings.DEBUG:
+#     from revproxy.views import ProxyView
+#
+#
+#     class AssetsProxyView(ProxyView):
+#         upstream = settings.PROXY_BASE_URL
+#
+#
+#     urlpatterns += staticfiles_urlpatterns()
+#     urlpatterns += [
+#         re_path(r'assets/bundles/(?P<path>.*)$', AssetsProxyView.as_view()),
+#     ]

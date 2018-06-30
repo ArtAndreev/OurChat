@@ -24,14 +24,13 @@
   background: #edeef0;
   border-radius: 30px;
   transition: background 0.2s linear;
+  &:hover {
+    background: #47E8E7;
+  }
 }
 
 .message-right {
   align-self: flex-end;
-
-  &:hover {
-    background: #47E8E7;
-  }
 }
 
 .message__author {
@@ -74,11 +73,11 @@
 }
 
 .input__pic-attach {
-  background: url(/static/core/img/push-pin.svg/) no-repeat center;
+  background: url(../img/push-pin.svg) no-repeat center;
 }
 
 .input__pic-send {
-  background: url(/static/core/img/right-arrow.svg/) no-repeat center;
+  background: url(../img/right-arrow.svg) no-repeat center;
 }
 
 .input__field {

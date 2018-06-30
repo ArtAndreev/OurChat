@@ -13,11 +13,14 @@ const publicPath = isProd ? '/static/' : '/assets/';
 
 module.exports = {
     entry: {
-        // vendor: ['jquery'],
+        vendor: ['jquery'],
+        base: path.resolve(core_src, 'base.js'),
         chat: path.resolve(core_src, 'chat.js'),
+        login_signup: path.resolve(auth_src, 'login-signup.js'),
     },
     output: {
         path: build,
+        publicPath: publicPath,
         filename: 'js/[name]-[hash].js',
     },
     plugins: [

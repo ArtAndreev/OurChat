@@ -1,37 +1,34 @@
 'use strict';
 
 import '../css/chat.scss';
-import '../img/push-pin.svg'
-import '../img/right-arrow.svg'
 
-import $ from 'jquery';
 import moment from 'moment';
 
-import '../../../../authentication/static/authentication/js/auth_info';
-import './csrf';
+import './csrf'; // import and set csrf header
+import { getUserInfo } from '../../../../authentication/static/authentication/js/auth_info';
 
-const messageTemplate = (id, text, time, author) => {
-    if (author === undefined) {
-        author = this.username
+
+moment.updateLocale('en', {
+    meridiem(hour, minute, isLowerCase) {
+        return hour < 12 ? 'a.m.' : 'p.m.';
     }
-    return `<div class="message">
-    <div class="message__author">
-      <div class="message__name">
-      
-${author}
-</div>
-   <div class="message__time">
-${moment(time).format('MMMM Do YYYY, h:mm:ss a')}
-</div>
+});
+
+const messageSendTemplate = (id, text, date, author, avatar) => `
+<div class="message message-right message__text-reverse m-10" data-id="${ id }">
+  <div class="message__author message-reverse mb-10">
+    <img class="user__avatar message__avatar" src="${ avatar }"/>
+    <span class="message__name ml-10 mr-10">${ author }</span>
+    <span class="message__time">${moment(date).format('MMMM DD, YYYY, h:mm a')}</span>
   </div>
-   <div class="message__text">
+  <span class="message__text">${ text }</span>
 </div>
-${text}
-</div>
-   `};
+`;
+
 
 
 $(document).ready(() => {
+    let User = getUserInfo();
     let form = $('#message__form');
     let input = $('#message__form input');
     let chat = $($('.chat')[0]);
@@ -55,9 +52,8 @@ $(document).ready(() => {
             contentType: false,
 
             success: response => {
-                // debugger;
-                chat.prepend(messageTemplate(response.id, response.text,
-                        response.date, response.author));
+                chat.prepend(messageSendTemplate(response.id, response.text,
+                        response.date, User.username, User.avatar));
 
                 input.val('');
             }

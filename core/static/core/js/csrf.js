@@ -1,7 +1,5 @@
 'use strict';
 
-import $ from 'jquery';
-
 // using jQuery
 function getCookie(name) {
     var cookieValue = null;

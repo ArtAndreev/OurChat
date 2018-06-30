@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load render_bundle from webpack_loader %}
 
-{% block extra_styles %}
-  <link href="{% static 'authentication/css/login-signup.css' %}" type="text/css" rel="stylesheet">
-{% endblock extra_styles %}
+{% block extra_scripts %}
+  {% render_bundle 'login_signup' %}
+{% endblock extra_scripts %}
 
 {% block title %}Sign in{% endblock title %}
 {% block content %}

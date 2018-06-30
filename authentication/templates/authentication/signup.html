@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load render_bundle from webpack_loader %}
 
-{% block extra_styles %}
-  <link href="{% static 'authentication/css/login-signup.css' %}" type="text/css" rel="stylesheet">
-{% endblock extra_styles %}
+{% block extra_scripts %}
+  {% render_bundle 'login_signup' %}
+{% endblock extra_scripts %}
 
 {% block title %}Sign up{% endblock title %}
 {% block header %}
@@ -11,7 +11,7 @@
 {% endblock header %}
 {% block content %}
   <div class="signup">
-    <form class="main-box signup__box mb-20" action="{% url 'auth:signup_view' %}" method="post">
+    <form class="main-box signup__box mb-20" action="{% url 'auth:signup_view' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <h1 class="title">Sign up to chat</h1>
       {% if form.errors %}

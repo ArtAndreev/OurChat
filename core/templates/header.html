@@ -7,15 +7,13 @@
   </div>
   <div class="header__elem">
     {% if request.user.is_authenticated %}
-      <li class="list-item m-10">{{ request.user.username }}</li>
-      <li class="list-item m-10"><img src="
+      <li class="list-item m-10 header__username">{{ request.user.username }}</li>
+      <li class="list-item m-10 header__avatar"><img src="
         {% if request.user.avatar %}
-          {{ request.user.avatar }}
-        {% else %}
-          {% static 'authentication/img/user.svg' %}
+          {{ request.user.avatar.url }}
         {% endif %}" class="user__avatar"/>
       </li>
-      <li class="list-item m-10">
+      <li class="list-item m-10 ml-20">
         <a href="{% url 'auth:logout' %}"><div class="header__logout"></div></a>
       </li>
     {% else %}

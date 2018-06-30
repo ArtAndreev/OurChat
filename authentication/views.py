@@ -1,7 +1,8 @@
 from django.contrib.auth.views import LoginView, LogoutView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView
+from django.views.generic.base import View
 
 from . import forms, models
 
@@ -34,3 +35,18 @@ class SignUpView(CreateView):
             return HttpResponseRedirect(reverse('core:chat_view'))
 
         return super().get(request, *args, **kwargs)
+
+
+class UserInfoView(View):
+    http_method_names = ['get', ]
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return JsonResponse({
+                'username': request.user.username,
+                'avatar': request.user.avatar.url
+            })
+
+        else:
+            return HttpResponse('Unauthorized', status=401)
+

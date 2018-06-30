@@ -1,4 +1,6 @@
 {% load static %}
+{% load render_bundle from webpack_loader %}
+{% load webpack_static from webpack_loader %}
 
 {% if message.author != request.user %}
 <div class="message m-10" data-id="{{ message.id }}">
@@ -9,10 +11,8 @@
 {% endif %}
   <img class="user__avatar message__avatar" src="
   {% if message.author.avatar %}
-    {{ message.author.avatar }}
-  {% else %}
-    {% static 'authentication/img/user.svg' %}/">
-  {% endif %}
+    {{ message.author.avatar.url }}
+  {% endif %}"/>
     <span class="message__name ml-10 mr-10">{{ message.author.username }}</span>
     <span class="message__time">{{ message.date }}</span>
   </div>

@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
 {% load static %}
 
 {% block title %} New chat {% endblock title %}
 
-{% block extra_styles %}
-  <link href="{% static 'core/css/chat.css' %}" type="text/css" rel="stylesheet">
-{% endblock extra_styles %}
-
 {% block extra_scripts %}
-  <script src="{% static 'core/js/csrf.js' %}"></script>
-  <script src="{% static 'core/js/chat.js' %}"></script>
+  {% render_bundle 'chat' 'js' %}
 {% endblock extra_scripts %}
 
 {% block header %}
@@ -17,15 +13,20 @@
 {% endblock header %}
 
 {% block content %}
-  <div class="chat">
-    {% for message in messages %}
-      {% include 'core/message.html' %}
-    {% endfor %}
-  </div>
-  <form id="message__form" action="{% url 'core:send_view' %}" method="post">
-    {% csrf_token %}
-    <div class="input__elem input__btn mr-10 input__pic-attach"></div>
-    <input type="text" value="" name="text" placeholder="Input message..." autocomplete="off" class="input__elem input__field"/>
-    <button type="submit" class="input__elem input__btn ml-10 input__pic-send"></button>
-  </form>
+{#  <main>#}
+{#  <div class="chat-panel">#}
+{##}
+{#  </div>#}
+    <div class="chat">
+      {% for message in messages %}
+        {% include 'core/message.html' %}
+      {% endfor %}
+    </div>
+    <form id="message__form" action="{% url 'core:send_view' %}" method="post">
+      {% csrf_token %}
+      <div class="input__elem input__btn mr-10 input__pic-attach"></div>
+      <input type="text" value="" name="text" placeholder="Input message..." autocomplete="off" class="input__elem input__field"/>
+      <button type="submit" class="input__elem input__btn ml-10 input__pic-send"></button>
+    </form>
+{#  </main>#}
 {% endblock content %}

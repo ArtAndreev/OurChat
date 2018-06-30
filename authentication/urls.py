@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^login/$', views.ChatLoginView.as_view(), name='login_view'),
     url(r'^logout/$', views.ChatLogoutView.as_view(), name='logout'),
     url(r'^signup/$', views.SignUpView.as_view(), name='signup_view'),
+    url(r'^info/$', views.UserInfoView.as_view(), name='user_info'),
 ]

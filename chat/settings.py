@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'webpack_loader'
 ]
 
 PROJECT_APPS = [
@@ -76,6 +77,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chat.wsgi.application'
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'build/',  # must end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': ['.+\.hot-update.js', '.+\.map']
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -125,7 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "build"),
+        os.path.join(BASE_DIR, 'build'),
 ]
 
 STATICFILES_FINDERS = [
@@ -135,7 +146,15 @@ STATICFILES_FINDERS = [
 
 STATIC_URL = '/static/'
 
+PROXY_BASE_URL = 'http://127.0.0.1:8080/assets/bundles'
 
 # New authentication: User
 
 AUTH_USER_MODEL = 'authentication.User'
+
+
+# Media files
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'

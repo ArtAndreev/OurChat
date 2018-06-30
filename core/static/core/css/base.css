@@ -39,6 +39,10 @@ html, body {
   margin-bottom: 20px;
 }
 
+.ml-20 {
+  margin-left: 20px;
+}
+
   /* link */
 
 .link {
@@ -146,10 +150,14 @@ header {
   align-items: center;
 }
 
+.header__avatar {
+  margin-left: 0;
+}
+
 .header__logout {
   width: 30px;
   height: 30px;
-  background: url(/static/authentication/img/x-button.svg/) no-repeat;}
+  background: url(../../../../authentication/static/authentication/img/x-button.svg) no-repeat;}
 
 /* user */
 
@@ -171,7 +179,7 @@ header {
 .site__logo {
   width: 40px;
   height: 40px;
-  background: url(/static/core/img/logo.svg/) no-repeat;
+  background: url(../img/logo.svg) no-repeat;
 }
 
 .site__name {

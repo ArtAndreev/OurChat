@@ -1,15 +1,16 @@
 {% load static %}
+{% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock %}</title>
-  <link href="{% static 'core/css/base.css' %}" type="text/css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
   {% block extra_styles %}
   {% endblock extra_styles %}
-  <script src="{% static 'core/js/jquery.min.js' %}"></script>
+  {% render_bundle 'base' 'js' %}
+  {% render_bundle 'vendor' 'js' %}
   {% block extra_scripts %}
   {% endblock extra_scripts %}
 </head>
