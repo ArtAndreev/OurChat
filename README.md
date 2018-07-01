@@ -3,13 +3,29 @@ Intensive course from KTS Studio, summer 2018
 
 ## How to run
 
+##### 1. Install Python and JS dependencies:
+
+```
+pip install -r requirements.txt
+npm install
+```
+
+##### 2. Build project
+
+```
+python manage.py migrate
+npm run build-prod
+```
+
+##### 3. Run servers
+
 * application-server:
  
 ```
 gunicorn -b ip:port chat.wsgi:application
 ```
 
-* proxy-server (nginx config):  
+* proxy-server (nginx config), static:  
 
 ```
 server {
