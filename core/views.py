@@ -55,6 +55,8 @@ class MessagesView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         try:
             last_id = int(request.GET.get('last_id'))
+        except TypeError:
+            return HttpResponseBadRequest()
         except ValueError:
             return HttpResponseBadRequest()
 
