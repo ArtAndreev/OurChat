@@ -49,23 +49,44 @@ class ChatView(LoginRequiredMixin, TemplateView):
 #     queryset = model.objects.all().order_by('-id')
 
 
-class MessagesView(LoginRequiredMixin, TemplateView):
-    template_name = 'core/polling_messages.html'
-
+class MessagesView(LoginRequiredMixin, View):
     login_url = reverse_lazy('auth:login_view')
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-
-        last_id = self.request.GET.get('last_id')
+    def get(self, request, *args, **kwargs):
+        try:
+            last_id = int(request.GET.get('last_id'))
+        except ValueError:
+            return HttpResponseBadRequest()
 
         if last_id:
-            messages = models.Message.objects.filter(
-                id__gt=last_id).order_by('-id')[:20]
+            messages = list(models.Message.objects.filter(
+                id__gt=last_id).order_by('id')[:20])
         else:
-            messages = models.Message.objects.all().order_by('-id')
-        data['messages'] = messages
-        return data
+            messages = list(models.Message.objects.all().order_by('id'))
+
+        messages_list = []
+        for message in messages:
+            attaches = message.attachment_set.filter()
+            attaches_list = []
+            for attach in attaches:
+                attaches_list.append({
+                    'url': attach.file.url,
+                    'filename': attach.filename,
+                    'content_type': attach.content_type
+                })
+
+            messages_list.append({
+                'id': message.id,
+                'text': message.text,
+                'date': message.date,
+                'username': message.author.username,
+                'avatar': message.author.avatar.url,
+                'attaches': attaches_list
+            })
+
+        return JsonResponse({
+            'messages': messages_list
+        })
 
 
 class MessageCreateView(FormView):
