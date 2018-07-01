@@ -5,7 +5,7 @@
 {% block title %} New chat {% endblock title %}
 
 {% block extra_scripts %}
-  {% render_bundle 'chat' 'js' %}
+  {% render_bundle 'chat' %}
 {% endblock extra_scripts %}
 
 {% block header %}
@@ -18,13 +18,21 @@
 {##}
 {#  </div>#}
     <div class="chat">
+    {% if messages %}
       {% for message in messages %}
         {% include 'core/message.html' %}
       {% endfor %}
+    {% else %}
+      <div class="chat__empty">
+        <span class="chat__empty-help mb-10">This chat is empty. You can be first!</span>
+        <div class="chat__empty-smiley"></div>
+      </div>
+    {% endif %}
     </div>
-    <form id="message__form" action="{% url 'core:send_view' %}" method="post">
+    <form id="message__form" action="{% url 'core:send_view' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="input__elem input__btn mr-10 input__pic-attach"></div>
+      <label for="input__attach" class="input__elem input__btn mr-10 input__pic-attach"></label>
+        <input id="input__attach" type="file" name="attachments" multiple />
       <input type="text" value="" name="text" placeholder="Input message..." autocomplete="off" class="input__elem input__field"/>
       <button type="submit" class="input__elem input__btn ml-10 input__pic-send"></button>
     </form>

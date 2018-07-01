@@ -1,6 +1,4 @@
 {% load static %}
-{% load render_bundle from webpack_loader %}
-{% load webpack_static from webpack_loader %}
 
 {% if message.author != request.user %}
 <div class="message m-10" data-id="{{ message.id }}">
@@ -16,5 +14,20 @@
     <span class="message__name ml-10 mr-10">{{ message.author.username }}</span>
     <span class="message__time">{{ message.date }}</span>
   </div>
-  <span class="message__text">{{ message.text }}</span>
+  {% if message.text %}
+    <span class="message__text">{{ message.text }}</span>
+  {% endif %}
+  {% if message.attachment_set.filter %}
+    <div class="message__attachments-block">
+    {% for attach in message.attachment_set.filter %}
+      {% if 'image/' in attach.content_type %}
+        <a href="{% get_media_prefix %}{{ attach.file }}">
+          <img src="{% get_media_prefix %}{{ attach.file }}" class="message__attachment-content mt-10"/>
+        </a>
+      {% else %}
+        <a class="message__attachment mt-10 link" href="{% get_media_prefix %}{{ attach.file }}">{{ attach.filename }}</a>
+      {% endif %}
+    {% endfor %}
+    </div>
+  {% endif %}
 </div>

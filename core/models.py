@@ -1,4 +1,8 @@
+from os import path
+from hashlib import sha256
+
 from django.db import models
+from chat.settings import SECRET_KEY
 
 from authentication.models import User
 
@@ -48,7 +52,7 @@ from authentication.models import User
 class Message(models.Model):
     author = models.ForeignKey(User, verbose_name='Author',
                                on_delete=models.CASCADE)
-    text = models.TextField(verbose_name='Message text', null=False)
+    text = models.TextField(verbose_name='Message text', null=True)
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
 
     class Meta:
@@ -58,6 +62,24 @@ class Message(models.Model):
 
     def __str__(self):
         return 'At {0} by {1}'.format(self.date, self.author)
+
+
+def upload_file_directory(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/chat/attachments/user_<id>/<filename>
+    return 'chat/attachments/user_{0}/{1}{2}'.format(
+        instance.message.author.id,
+        sha256((filename + str(instance.message.date)).encode('utf-8')).hexdigest(),
+        path.splitext(filename)[1]  # file extension
+    )
+
+
+class Attachment(models.Model):
+    message = models.ForeignKey(Message, verbose_name='From',
+                                on_delete=models.CASCADE)
+    file = models.FileField(verbose_name='Attach file',
+                            upload_to=upload_file_directory)
+    filename = models.TextField(verbose_name='Filename', blank=True)
+    content_type = models.TextField(verbose_name='Content-type', blank=True)
 
 
 # class RoomMessage(Message):

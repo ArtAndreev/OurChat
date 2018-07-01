@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, ListView, TemplateView
+from django.views.generic import CreateView, ListView, TemplateView, FormView
 from django.views.generic.base import View
 
 from . import forms, models
@@ -28,7 +29,6 @@ class ChatView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        user_id = kwargs.get('id')
         messages = models.Message.objects.all().order_by('-id')
         data['messages'] = messages
         # dialog_list = models.ChatDialog.objects.get_user_dialogs(user_id)
@@ -68,29 +68,34 @@ class MessagesView(LoginRequiredMixin, TemplateView):
         return data
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(FormView):
     form_class = forms.MessageCreateForm
+    http_method_names = ['post', ]
+    template_name = 'core/message.html'  # we don't really use it
 
-    def get(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['post'])
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
 
-    def get_success_url(self):
-        return reverse('core:chat_view')
-
-    def form_valid(self, form):
-        super().form_valid(form)
-        response = JsonResponse({
-            'id': self.object.id,
-            'text': self.object.text,
-            'date': self.object.date
-        })
-
-        return response
+        if form.is_valid():
+            message, attachments = form.save()
+            if not attachments:
+                return JsonResponse({
+                    'id': message.id,
+                    'text': message.text,
+                    'date': message.date
+                })
+            else:
+                return JsonResponse({
+                    'id': message.id,
+                    'text': message.text,
+                    'date': message.date,
+                    'attaches': attachments
+                })
+        else:
+            return HttpResponseBadRequest()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
-
-    def form_invalid(self, form):
-        return HttpResponseBadRequest()

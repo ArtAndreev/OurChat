@@ -14,17 +14,43 @@ moment.updateLocale('en', {
     }
 });
 
-const messageSendTemplate = (id, text, date, author, avatar) => `
+const messageSendTemplate = (id, text, date, author, avatar, attaches = undefined) => {
+    const render_text = (text) => text ? `<span class="message__text">${ text }</span>` : '';
+
+    const render_attaches_block = (attaches) => {
+        let block = '';
+        if (attaches) {
+            block += `<div class="message__attachments-block">`;
+            for (let i = 0; i < attaches.length; i++) {
+                let subdvach = attaches[i].content_type.substring(0, 5);
+                if (subdvach === 'image') {
+                    block += `
+                        <a href="${attaches[i].url}">
+                          <img src="${ attaches[i].url }" class="message__attachment-content mt-10"/>
+                        </a>`;
+                }
+                else {
+                    block += `
+                        <a class="message__attachment mt-10 link" href="${ attaches[i].url }">${ attaches[i].filename }</a>`;}
+            }
+
+            block += `</div>`;
+        }
+
+        return block;
+    };
+
+    return `
 <div class="message message-right message__text-reverse m-10" data-id="${ id }">
   <div class="message__author message-reverse mb-10">
     <img class="user__avatar message__avatar" src="${ avatar }"/>
     <span class="message__name ml-10 mr-10">${ author }</span>
-    <span class="message__time">${moment(date).format('MMMM DD, YYYY, h:mm a')}</span>
+    <span class="message__time">${ moment(date).format('MMMM D, YYYY, h:mm a') }</span>
   </div>
-  <span class="message__text">${ text }</span>
-</div>
-`;
-
+  ${ render_text(text) }
+  ${ render_attaches_block(attaches) }  
+</div>`;
+};
 
 
 $(document).ready(() => {
@@ -39,9 +65,10 @@ $(document).ready(() => {
 
         let formData = new FormData(e.target);
         let text = formData.get('text');
+        let files = formData.get('attachments');
 
         // prevent sending empty messages
-        if (!text) {
+        if (!text && files.size === 0) {
             return;
         }
 
@@ -52,8 +79,20 @@ $(document).ready(() => {
             contentType: false,
 
             success: response => {
-                chat.prepend(messageSendTemplate(response.id, response.text,
-                        response.date, User.username, User.avatar));
+                chat.prepend(() => {
+                        if (!response.attaches) {
+                            return messageSendTemplate(
+                                response.id, response.text, response.date,
+                                User.username, User.avatar
+                            )
+                        }
+                        else {
+                            return messageSendTemplate(
+                                response.id, response.text, response.date,
+                                User.username, User.avatar, response.attaches
+                            )
+                        }
+                    });
 
                 input.val('');
             }

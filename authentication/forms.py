@@ -81,23 +81,3 @@ class SignUpForm(UserCreationForm):
                 'class': 'signup__elem form__field mb-20',
             }),
         }
-    #
-    # def clean(self):
-    #     cleaned_data = super(SignUpForm, self).clean()
-    #     password = cleaned_data.get("password")
-    #     confirm_password = cleaned_data.get("confirm_password")
-    #
-    #     if password != confirm_password:
-    #         raise forms.ValidationError(
-    #             "Password and confirm password does not match."
-    #         )
-    #
-    #     return self.cleaned_data
-    #
-    # def save(self, commit=True):
-    #     user = super(SignUpForm, self).save(commit=False)
-    #     user.set_password(self.cleaned_data["password"])
-    #     if commit:
-    #         user.save()
-    #     return user
-    pass
