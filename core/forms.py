@@ -1,33 +1,9 @@
+from asgiref.sync import async_to_sync
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from . import models
-
-
-# class MessageCreateForm(forms.ModelForm):
-#     input__attach = forms.FileField()
-#
-#     class Meta:
-#         model = models.Message
-#         fields = ['text', ]
-#
-#     def __init__(self, *args, **kwargs):
-#         user = kwargs.pop('user')
-#         attach = kwargs.pop('files')
-#         super().__init__(*args, **kwargs)
-#         self.user = user
-#         self.attach = attach
-#
-#     def save(self, commit=True):
-#         message = super().save(commit=False)
-#         message.author = self.user
-#         if commit:
-#             message.save()
-#             if self.attach:
-#                 for _ in self.attach['file']:
-#                     attach = models.Attachment.objects.create(file=_)
-#                     attach.save()
-#         return message
+from channels.layers import get_channel_layer
 
 
 class MessageCreateForm(forms.Form):
@@ -65,4 +41,16 @@ class MessageCreateForm(forms.Form):
                         'filename': attach.filename,
                         'content_type': attach.content_type
                     })
+
+        # consumers.ChatConsumer.send(text_data=(message, attachments))
+        channel_layer = get_channel_layer()
+        # , text_data={
+        #     'message': message,
+        #     'attachments': attachments
+        # })
+        async_to_sync(channel_layer.send)(message={'message': message})
+        # async_to_sync(channel_layer.send_message)(text_data={
+        #     'message': message,
+        #     'attachments': attachments
+        # })
         return message, attachments

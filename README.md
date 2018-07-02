@@ -22,7 +22,7 @@ npm run build-prod
 * application-server:
  
 ```
-gunicorn -b ip:port chat.wsgi:application
+gunicorn -b ip:port(127.0.0.1:8000) chat.wsgi:application
 ```
 
 * proxy-server (nginx config), static:  
@@ -51,4 +51,12 @@ server {
         alias    /Users/artyom/Projects/Chat/media/;
     }
 }
+```
+
+* websocket-server (daphne) && database for ws sessions (redis):
+
+  Run your redis on default port, then
+  
+```
+daphne -b ip(127.0.0.1) -p port(8001) chat.asgi:application
 ```
