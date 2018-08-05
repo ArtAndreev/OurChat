@@ -71,43 +71,6 @@ $(document).ready(() => {
     let chat = $($('.chat')[0]);
 
 
-    // WebSocket
-    // const roomName = room_name_json; // get it from info later
-    const webSocketPort = 8001;
-
-    const chatSocket = new WebSocket(
-        'ws://' + window.location.hostname + ':' + webSocketPort +
-        // '/ws/chat/' + roomName + '/' // for later chat rooms implementation
-        '/ws/chat/'
-    );
-
-    chatSocket.onopen = (e) => {
-        console.log('Chat socket opened.');
-    };
-
-    chatSocket.onmessage = (e) => {
-        console.log('Got message!');
-        const message = e.data;
-        debugger;
-        chat.prepend(messageGetTemplate(
-            message.id,
-            message.text,
-            message.date,
-            message.username,
-            message.avatar,
-            message.attaches
-            )
-        );
-    };
-
-    chatSocket.onerror = (e) => {
-        console.error("Chat socket error occurred: " + e.message);
-    };
-
-    chatSocket.onclose = (e) => {
-        console.log('Chat socket closed unexpectedly.');
-    };
-
 
     // event submit form
     form.on('submit', (e) => {
@@ -115,8 +78,8 @@ $(document).ready(() => {
 
         let formData = new FormData(e.target);
         let text = formData.get('text');
-        let files = formData.getAll('attachments');
-        debugger;
+        let files = formData.get('attachments');
+
         // prevent sending empty messages
         if (!text && files.size === 0) {
             return;
@@ -137,13 +100,36 @@ $(document).ready(() => {
             }
         });
 
-        // chatSocket.send(JSON.stringify({
-        //     username: User.username,
-        //     text: text,
-        //     attaches: formData.getAll('attachments'),
-        // }));
-
         input.val('');
 
     });
+
+    // polling
+    setInterval(() => {
+        const lastId = $('.message').first().data('id');
+
+        $.get({
+            url: '/message/get',
+            data: {
+                last_id: lastId,
+            },
+
+            success: response => {
+                if (response) {
+                    for (let i = 0; i < response.messages.length; i++) {
+                        const message = response.messages[i];
+                        chat.prepend(messageGetTemplate(
+                            message.id,
+                            message.text,
+                            message.date,
+                            message.username,
+                            message.avatar,
+                            message.attaches
+                            )
+                        );
+                    }
+                }
+            }
+        })
+    }, 1000); // polling time is 1 sec
 });
